@@ -1,4 +1,4 @@
-#' This is a function used to solve the knapsack problem with brute force algorithm
+#' This is a function used to solve the knapsack problem with a brute force algorithm
 #'
 #' This function solves the knapsack problem using a brute force algorithm.
 #' The inputs are a data frame of items with a value and a weight and a parameter
