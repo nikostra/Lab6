@@ -19,7 +19,7 @@
 #'  )
 #' brute_force_knapsack(knapsack_objects[1:12,],3500)
 #' brute_force_knapsack(knapsack_objects[1:8,],2000)
-brute_force_knapsack = function(x,W, parallel = FALSE){
+brute_force_knapsack = function(x,W){
   if(W < 0){
     stop("The total weight cannot be negatie", call. = FALSE)
   }
