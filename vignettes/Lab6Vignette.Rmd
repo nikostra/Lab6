@@ -1,0 +1,35 @@
+---
+title: "Lab6Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lab6Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Lab6)
+```
+# Running times
+Function running times before optimization:
+
+* Brute force (n=16): 29.6s
+  
+* Dynamic programming (n=500): 2.22s
+  
+* Greedy algorithm (n=1000000): 286ms
+
+Function running times after optimization:
+
+* Brute force (n = 16):
+  
+# Profiling insights:
+In brute_force_knapsack() the rbind() function in the first version took up the most time.
+The function was modified to intialize the element matrix and change each row instead of appending each row with rbind().
