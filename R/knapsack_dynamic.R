@@ -20,8 +20,8 @@
 #'   w=sample(1:4000, size = n, replace = TRUE),
 #'    v=runif(n = n, 0, 10000)
 #'  )
-#' dynamic_knapsack(knapsack_objects[1:12,],3500)
-#' dynamic_knapsack(knapsack_objects[1:8,],2000)
+#' knapsack_dynamic(knapsack_objects[1:12,],3500)
+#' knapsack_dynamic(knapsack_objects[1:8,],2000)
 
 #for testing:
 # RNGversion(min(as.character(getRversion()),"3.5.3"))
