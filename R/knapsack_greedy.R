@@ -8,6 +8,9 @@
 #'  
 #' @param x Data frame with all the elements that can be added to the knapsack.
 #' @param W Weight limit of the knapsack.
+#' 
+#' @return A list with the best computed value and the respective combination of
+#' elements.
 #'  
 #' @export
 #' @importFrom utils tail
