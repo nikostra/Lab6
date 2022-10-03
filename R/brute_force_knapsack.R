@@ -21,14 +21,23 @@
 #' brute_force_knapsack(knapsack_objects[1:8,],2000)
 brute_force_knapsack = function(x,W){
   if(W < 0){
-    stop("The total weight cannot be negatie", call. = FALSE)
+    stop("The total weight cannot be negative", call. = FALSE)
   }
   n <- nrow(x)
-  elements <- c()
+  elements <- matrix(0, 2^n, n)
   values <- integer(2^n) # Number of possible combinations
   for (i in 1:length(values)){
     # Store combination number as a binary vector to get the active elements for each case
-    elements <- rbind(elements, intToBits(i)[1:n]) 
+    raw_comb <- intToBits(i)
+    # Save the binary vector to elements matrix
+    for (j in 1:n){
+      if (raw_comb[i] == 1){
+        elements[i, j] <- 1
+      }
+      else{
+        elements[i, j] <- 0
+      }
+    }
     val <- 0
     weight <- 0
     for (j in 1:n){
