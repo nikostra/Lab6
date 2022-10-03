@@ -31,7 +31,7 @@ brute_force_knapsack = function(x,W){
     raw_comb <- intToBits(i)
     # Save the binary vector to elements matrix
     for (j in 1:n){
-      if (raw_comb[i] == 1){
+      if (raw_comb[j] == 1){
         elements[i, j] <- 1
       }
       else{
