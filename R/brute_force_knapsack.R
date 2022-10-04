@@ -14,54 +14,97 @@
 #' @export
 #' 
 #' @examples 
-#' n = 2000
-#' knapsack_objects <-
-#' data.frame(
-#'   w=sample(1:4000, size = n, replace = TRUE),
-#'    v=runif(n = n, 0, 10000)
-#'  )
+# n = 2000
+# knapsack_objects <-
+# data.frame(
+#   w=sample(1:4000, size = n, replace = TRUE),
+#    v=runif(n = n, 0, 10000)
+#  )
 #' brute_force_knapsack(knapsack_objects[1:12,],3500)
 #' brute_force_knapsack(knapsack_objects[1:8,],2000)
-brute_force_knapsack = function(x,W){
+brute_force_knapsack = function(x,W, parallel = FALSE){
   if(W < 0){
     stop("The total weight cannot be negative", call. = FALSE)
   }
-  n <- nrow(x)
-  elements <- matrix(0, 2^n, n)
-  values <- integer(2^n) # Number of possible combinations
-  for (i in 1:length(values)){
-    # Store combination number as a binary vector to get the active elements for each case
-    raw_comb <- intToBits(i)
-    # Save the binary vector to elements matrix
-    for (j in 1:n){
-      if (raw_comb[j] == 1){
-        elements[i, j] <- 1
-      }
-      else{
-        elements[i, j] <- 0
-      }
-    }
-    val <- 0
-    weight <- 0
-    for (j in 1:n){
-      if (elements[i,j] == 1){
-        # Add the active elements weights and values
-        weight <- weight + x$w[j]
-        val <- val + x$v[j]
-      }
-    }
-    if (weight <= W){
-      # If weight is below the limit, save the value
-      values[i] <- val
-    }
-  }
-  # Get the maximum value:
-  best_val <- max(values)
-  # Get the active elements from the best case:
-  el <- 1:n
-  index <- which(values == best_val)
-  el <- el[which(elements[index,] == 1)]
   
-  res <- list("value" = best_val, "elements" = el)
-  return(res)
+  if (parallel == TRUE){
+    bfk_fun <- function(i, data, W){
+      n <- nrow(x)
+      # Store combination number as a binary vector to get the active elements for each case
+      raw_comb <- intToBits(i)
+      # Save the binary vector to elements matrix
+      elrow <- c()
+      for (j in 1:n){
+        if (raw_comb[j] == 1){
+          elements  <- append(elrow, 1)
+        }
+        else{
+          elements  <- append(elrow, 0)
+        }
+      }
+      val <- 0
+      weight <- 0
+      for (j in 1:n){
+        if (elements[j] == 1){
+          # Add the active elements weights and values
+          weight <- weight + data$w[j]
+          val <- val + data$v[j]
+        }
+      }
+      if (weight <= W){
+        # If weight is below the limit, save the value
+        values <- val
+      }
+      return(values, elements)
+    }
+    # Get number of cores
+    cores <- detectCores() -1
+    # Set up the cluster
+    cl <- makeCluster(cores)
+    # Run the function in parallel
+    res <- parSapply(cl, 1:2^n, bfk_fun, data = x, W = W)
+    # Stop the cluster
+    stopCluster(cl)
+    return(res)
+  }
+  else{ # Original brute force function:
+    n <- nrow(x)
+    elements <- matrix(0, 2^n, n)
+    values <- integer(2^n) # Number of possible combinations
+    for (i in 1:length(values)){
+      # Store combination number as a binary vector to get the active elements for each case
+      raw_comb <- intToBits(i)
+      # Save the binary vector to elements matrix
+      for (j in 1:n){
+        if (raw_comb[j] == 1){
+          elements[i, j] <- 1
+        }
+        else{
+          elements[i, j] <- 0
+        }
+      }
+      val <- 0
+      weight <- 0
+      for (j in 1:n){
+        if (elements[i,j] == 1){
+          # Add the active elements weights and values
+          weight <- weight + x$w[j]
+          val <- val + x$v[j]
+        }
+      }
+      if (weight <= W){
+        # If weight is below the limit, save the value
+        values[i] <- val
+      }
+    }
+    # Get the maximum value:
+    best_val <- max(values)
+    # Get the active elements from the best case:
+    el <- 1:n
+    index <- which(values == best_val)
+    el <- el[which(elements[index,] == 1)]
+    
+    res <- list("value" = best_val, "elements" = el)
+    return(res)
+  }
 }
