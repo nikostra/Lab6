@@ -61,11 +61,15 @@ brute_force_knapsack = function(x,W, parallel = FALSE){
     # Get number of cores
     cores <- detectCores() -1
     # Set up the cluster
-    cl <- makeCluster(cores)
+    c1 <- makeCluster(cores)
+    clusterExport(c1, bfk_fun)
+    clusterExport(c1, x)
+    clusterExport(c1, W)
+    clusterExport(c1, n)
     # Run the function in parallel
-    res <- parSapply(cl, 1:2^n, bfk_fun, data = x, W = W, n = n)
+    res <- parSapply(c1, 1:2^n, function(i) bfk_fun(i, data = x, W, n))
     # Stop the cluster
-    stopCluster(cl)
+    stopCluster(c1)
     return(res)
   }
   else{ # Original brute force function:
