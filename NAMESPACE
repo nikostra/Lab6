@@ -2,4 +2,7 @@
 
 export(brute_force_knapsack)
 export(greedy_knapsack)
+export(knapsack_dynamic)
+export(recursive_alg_knapsack)
+import(parallel)
 importFrom(utils,tail)

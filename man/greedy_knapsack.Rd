@@ -11,6 +11,10 @@ greedy_knapsack(x, W)
 
 \item{W}{Weight limit of the knapsack.}
 }
+\value{
+A list with the best computed value and the respective combination of
+elements.
+}
 \description{
 This function solves the knapsack problem using a greedy algorithm. This does not
 guarantee a perfect solution, but runs much faster than other options. In any case

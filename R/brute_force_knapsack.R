@@ -6,6 +6,7 @@
 #'  
 #' @param x Data frame with all the elements that can be added to the knapsack.
 #' @param W Weight limit of the knapsack.
+#' @param parallel Defines if the function should be run using parallel cores
 #' 
 #' @return A list with the best computed value and the respective combination of
 #' elements.
@@ -14,12 +15,12 @@
 #' @export
 #' 
 #' @examples 
-# n = 2000
-# knapsack_objects <-
-# data.frame(
-#   w=sample(1:4000, size = n, replace = TRUE),
-#    v=runif(n = n, 0, 10000)
-#  )
+#' n = 2000
+#' knapsack_objects <-
+#' data.frame(
+#'   w=sample(1:4000, size = n, replace = TRUE),
+#'    v=runif(n = n, 0, 10000)
+#'  )
 #' brute_force_knapsack(knapsack_objects[1:12,],3500)
 #' brute_force_knapsack(knapsack_objects[1:8,],2000)
 brute_force_knapsack = function(x,W, parallel = FALSE){
@@ -28,8 +29,8 @@ brute_force_knapsack = function(x,W, parallel = FALSE){
   }
   
   if (parallel == TRUE){
-    bfk_fun <- function(i, data, W){
-      n <- nrow(x)
+    n <- nrow(x)
+    bfk_fun <- function(i, data, W, n){
       # Store combination number as a binary vector to get the active elements for each case
       raw_comb <- intToBits(i)
       # Save the binary vector to elements matrix
@@ -62,7 +63,7 @@ brute_force_knapsack = function(x,W, parallel = FALSE){
     # Set up the cluster
     cl <- makeCluster(cores)
     # Run the function in parallel
-    res <- parSapply(cl, 1:2^n, bfk_fun, data = x, W = W)
+    res <- parSapply(cl, 1:2^n, bfk_fun, data = x, W = W, n = n)
     # Stop the cluster
     stopCluster(cl)
     return(res)
