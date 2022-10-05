@@ -11,4 +11,8 @@
   Greedy algorithm (n=1000000): 286ms
   
   ### Profiling insights:
-  In brute_force_knapsack() the rbind() function takes up the most time
+  In brute_force_knapsack() the rbind() function takes up the most time. The function was modified to intialize the element matrix and change each row instead of appending each row with rbind().
+
+  After optimization the runtime decreased significantly to 1.16s for n=16.
+  
+  Additionally we implemented an alternative brute force algorithm (recursive_alg_knapsack() ) that uses recursion, which is also significantly faster than the default brute force algorithm. For n=16 it completes the computation in 902µs.
