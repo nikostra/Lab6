@@ -17,6 +17,44 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(Lab6)
 ```
+
+# Overview
+This vignette illustrates how the package [Lab6](https://github.com/nikostra/Lab6.git) works and it explains its different functionalities to solve the knapsack problem. For the knapsack problem we have n objects each with a different weight (w) and value (v). Using different algorithms, the objective is to find the optimal combination of objects that gives the maximum value possible while weighting less than a provided maximum weight (W).
+
+We will include examples of the functions, as well as the running times and different optimizations carried out to reduce them as much as possible.
+
+# Set up
+First of all, the number of objects needs to be defined. The following code must be run to get the data:
+```{r}
+RNGversion(min(as.character(getRversion()),"3.5.3"))
+set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
+n <- 2000
+knapsack_objects <-
+  data.frame(
+    w=sample(1:4000, size = n, replace = TRUE),
+    v=runif(n = n, 0, 10000)
+  )
+```
+
+Now we will try each of the different algorithms:
+
+* Brute force algorithm:
+```{r}
+brute_force_knapsack(x = knapsack_objects[1:12,], W =3500)
+brute_force_knapsack(x = knapsack_objects[1:8,], W = 2000)
+```
+
+* Dynamic algorithm:
+```{r}
+knapsack_dynamic(x = knapsack_objects[1:12,], W =3500)
+knapsack_dynamic(x = knapsack_objects[1:8,], W =2000)
+```
+
+* Greedy algorithm:
+```{r}
+greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
+greedy_knapsack(x = knapsack_objects[1:1200,], W = 2000)
+```
 # Running times
 Function running times before optimization:
 
@@ -28,8 +66,12 @@ Function running times before optimization:
 
 Function running times after optimization:
 
-* Brute force (n = 16):
+* Brute force (n = 16): 1.16s
   
 # Profiling insights:
 In brute_force_knapsack() the rbind() function in the first version took up the most time.
 The function was modified to intialize the element matrix and change each row instead of appending each row with rbind().
+
+After optimization the runtime decreased significantly to 1.16s for n=16.
+
+Additionally we implemented an alternative brute force algorithm (recursive_alg_knapsack() ) that uses recursion, which is also significantly faster than the default brute force algorithm. For n=16 it completes the computation in 902µs.

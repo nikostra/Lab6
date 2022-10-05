@@ -34,13 +34,13 @@ brute_force_knapsack = function(x,W, parallel = FALSE){
       # Store combination number as a binary vector to get the active elements for each case
       raw_comb <- intToBits(i)
       # Save the binary vector to elements matrix
-      elrow <- c()
+      elements <- c()
       for (j in 1:n){
         if (raw_comb[j] == 1){
-          elements  <- append(elrow, 1)
+          elements  <- append(elements, 1)
         }
         else{
-          elements  <- append(elrow, 0)
+          elements  <- append(elements, 0)
         }
       }
       val <- 0
