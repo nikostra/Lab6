@@ -32,6 +32,4 @@ data.frame(
 greedy_knapsack(knapsack_objects[1:800,],3500)
 greedy_knapsack(knapsack_objects[1:1200,],2000)
 
-
-
 }

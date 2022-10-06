@@ -30,5 +30,4 @@ data.frame(
 recursive_alg_knapsack(knapsack_objects[1:12,],3500)
 recursive_alg_knapsack(knapsack_objects[1:8,],2000)
 
-
 }

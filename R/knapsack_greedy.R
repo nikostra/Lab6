@@ -25,8 +25,6 @@
 #' greedy_knapsack(knapsack_objects[1:800,],3500)
 #' greedy_knapsack(knapsack_objects[1:1200,],2000)
 #' 
-#' 
-#' 
 greedy_knapsack = function(x,W){
   if(W < 0){
     stop("The total weight cannot be negatie", call. = FALSE)

@@ -36,6 +36,7 @@ knapsack_objects <-
   )
 ```
 
+# Knapsack Results
 Now we will try each of the different algorithms:
 
 * Brute force algorithm:
@@ -66,12 +67,43 @@ Function running times before optimization:
 
 Function running times after optimization:
 
-* Brute force (n = 16): 1.16s
+* Brute force (n = 16): 1.04s
   
 # Profiling insights:
-In brute_force_knapsack() the rbind() function in the first version took up the most time.
-The function was modified to intialize the element matrix and change each row instead of appending each row with rbind().
+After profiling the different functions, the only function which we could optimize was the brute force algorithm function. In brute_force_knapsack(), the rbind() function in the first version took up the most time.
+The function was modified to initialize the element matrix and change each row instead of appending each row with rbind().
 
 After optimization the runtime decreased significantly to 1.16s for n=16.
 
 Additionally we implemented an alternative brute force algorithm (recursive_alg_knapsack() ) that uses recursion, which is also significantly faster than the default brute force algorithm. For n=16 it completes the computation in 902µs.
+
+Compared to the other algorithms from this package, the performance of this recursive algorithm is better than the brute force and dynamic algorithms.
+
+```{r}
+recursive_alg_knapsack(knapsack_objects[1:12,],3500)
+```
+
+# Parallelizing brute force search
+An optional argument has been added to choose whether the brute force algorithm should be run parallelized or not. The running times of both the parallelized version and the normal one have been compared for different sets of objects.
+
+For n = 16 objects:
+
+* Original time: 1.04s
+
+* Parallelized time: 2.10s
+
+For n = 20 objects:
+
+* Original time: 19.11s
+
+* Parallelized time: 16.09s
+
+For n =22:
+
+* Original time: 91.06s
+
+* Parallelized time: 69.06s
+
+For smaller sets of objects, the parallelized brute force search does not improve the running time, and it even lasts longer than the original version. This is due to the starting time of the cluster, which is considerable compared to the low running time in such cases.
+
+For larger sets of objects the parallelized brute force improves the running time over the original brute force search. However, the running time is still much larger than the ones from other algorithms.
